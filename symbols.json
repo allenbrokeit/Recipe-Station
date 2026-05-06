@@ -1,0 +1,11 @@
+{
+  "owner": "system",
+  "key": "chef-recipe-station",
+  "dir": "./symbols",
+  "bundler": "parcel",
+  "sharedLibraries": [
+    "system/default"
+  ],
+  "version": "1.0.6",
+  "versionId": "69d3d70029395865ed41e0a1"
+}
