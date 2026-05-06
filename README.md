@@ -105,5 +105,3 @@ This script pulls recipe data from external sources, parses ingredient strings i
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ---
-
-**GitHub Project URL**: [https://github.com/allenbrokeit/Recipe-Station](https://github.com/allenbrokeit/Recipe-Station)
