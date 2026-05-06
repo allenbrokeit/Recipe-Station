@@ -97,3 +97,30 @@ Because of this implicit inheritance, whenever a forced global re-render was tri
 - **Wrong Solution:** Calling `document.querySelector` inside a reactive property like `text` or `on: { render: ... }`.
   - *Why it's wrong:* These properties run during the virtual DOM reconciliation phase *before* the actual DOM nodes have been painted or updated. The selector will either return `null` or an outdated element.
 - **Right Solution:** Wrap DOM-dependent logic in a `setTimeout` or an async `function` inside an event handler to ensure the browser's paint cycle has finished and the target elements exist in the real DOM.
+
+### 11. Nested Event Syntax Breaking Reactivity
+- **Bug:** State updates inside `on: { input: ... }` or `on: { render: ... }` on the `RecipeSelector` dropdown completely failed to trigger. The dropdown visually changed but the rest of the UI (Title, Ingredients) remained stuck.
+- **Root Cause:** DOMQL v3 requires flat, top-level event handlers (e.g., `onInput: ...`, `onRender: ...`). Nesting them inside an `on: {}` object is an invalid syntax and causes the event listeners to either fail silently or not bind to the DOMQL reactivity engine correctly.
+- **Right Solution:** Use `onInput: (e, el, s) => { ... }` directly on the component properties.
+
+### 12. Deep State Traversal in Dynamic Arrays
+- **Bug:** The ingredients and instructions failed to update when switching recipes, even when the `activeRecipeIndex` was successfully updated in the root state.
+- **Root Cause:** The `IngredientList` was defining `children: (el, s) => s.root.recipes[s.root.activeRecipeIndex].ingredients`. When `activeRecipeIndex` changed, the framework's signal tracking didn't correctly register the deep dependency change, failing to force a re-render of the array elements.
+- **Right Solution:** Hoist the dynamic arrays directly into the root state (e.g., `s.root.ingredients` and `s.root.instructions`). Then, inside `onInput`, explicitly update them: `s.root.update({ ingredients: newIngredients })`. The lists then map directly to these properties (`children: (el, s) => s.root.ingredients || []`), allowing DOMQL to accurately track mutations.
+
+### 13. Primitive String Array Reconciliation
+- **Bug:** The `InstructionStepper` updated successfully for "Step 2", but "Step 1" remained stuck on the previous recipe's instructions.
+- **Root Cause:** The `instructions` array was composed of raw primitive strings. When replacing one array of primitives with another, DOMQL's `childrenAs: 'state'` array diffing algorithm struggles to track identity and state proxy changes for primitives, leading to partial UI updates.
+- **Right Solution:** In the `children` mapping function, explicitly map the primitive strings into objects: `children: (el, s) => (s.root.instructions || []).map(text => ({ text }))`. This guarantees DOMQL has a stable object reference to attach its state Proxy to, ensuring perfect reconciliation when the array contents swap.
+
+### 14. Inconsistent Unit Data Encoding
+- **Bug:** The metric system was failing to translate specific items like "12 ounce package thin egg noodles". 
+- **Root Cause:** The recipe data was inconsistently formatted, with some measurements baked into the `name` string while the `baseUnit` was left empty. This bypassed the `formatIngredient` logic which relies on a populated `baseUnit` to detect and convert US measurements.
+- **Right Solution:** Normalize the source data in `recipes.js` to ensure all numerical measurements are moved to `baseQuantity` and all US units (oz, fl oz, cup, etc.) are moved to `baseUnit`. This allows the unit conversion logic to reliably detect and translate all ingredients.
+
+### 15. Overriding System Color Schemes
+- **Task:** Force the application into light mode to avoid UI inconsistencies in dark mode environments.
+- **Wrong Solution:** Attempting to force light mode by manually deleting `@dark` themes in `theme.js`.
+    - *Why it's wrong:* This is tedious, error-prone, and can leave the application with broken or missing styles if a component expects a dark variant.
+- **Right Solution:** Add `globalTheme: 'light'` to the exported design system configuration in `designSystem/index.js`. This is the framework's authoritative way to lock the application into a specific color scheme regardless of OS preferences.
+

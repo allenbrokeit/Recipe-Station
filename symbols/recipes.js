@@ -100,9 +100,9 @@ export default [
       },
       {
         "id": "2-9",
-        "baseQuantity": 1,
-        "baseUnit": "",
-        "name": "(12 ounce) package thin egg noodles"
+        "baseQuantity": 12,
+        "baseUnit": "oz",
+        "name": "package thin egg noodles"
       }
     ],
     "instructions": [
@@ -195,14 +195,14 @@ export default [
       {
         "id": "4-3",
         "baseQuantity": 2,
-        "baseUnit": "fluid",
-        "name": "ounces tequila"
+        "baseUnit": "fl oz",
+        "name": "tequila"
       },
       {
         "id": "4-4",
         "baseQuantity": 1,
-        "baseUnit": "fluid",
-        "name": "ounce orange liqueur"
+        "baseUnit": "fl oz",
+        "name": "orange liqueur"
       }
     ],
     "instructions": [

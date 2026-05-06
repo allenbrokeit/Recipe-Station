@@ -30,4 +30,5 @@ export default {
   reset,
   animation,
   media,
+  globalTheme: 'light',
 }

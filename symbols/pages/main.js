@@ -6,7 +6,14 @@ export const main = {
 
   HeaderInfo: {
     flow: 'y', gap: 'A',
-    H1: { text: (el, s) => s.recipes[s.activeRecipeIndex].title, fontSize: 'E', fontWeight: 'bold' },
+    H1: { 
+      text: (el, s) => {
+        const recipes = s.root.recipes
+        const idx = s.root.activeRecipeIndex
+        return recipes[idx] ? recipes[idx].title : ''
+      },
+      fontSize: 'E', fontWeight: 'bold' 
+    },
     Controls: {
       extends: 'RecipeControls'
     }
@@ -21,9 +28,9 @@ export const main = {
       H3: { tag: 'h3', text: 'Ingredients', fontSize: 'C', borderBottom: '2px solid', borderBottomColor: 'primary', paddingBottom: 'Z' },
       IngredientList: {
         flow: 'y',
-        children: (el, s) => s.recipes[s.activeRecipeIndex].ingredients,
-        childrenAs: 'state',
-        childExtends: 'SmartIngredientItem'
+        children: (el, s) => s.root.ingredients || [],
+        childExtends: 'SmartIngredientItem',
+        childrenAs: 'state'
       }
     },
 
@@ -49,26 +56,33 @@ export const main = {
         cursor: 'pointer',
         fontSize: 'A',
         fontFamily: 'inherit',
-        children: (el, s) => s.recipes.map((r, i) => ({
+        children: (el, s) => s.root.recipes.map((r, i) => ({
           tag: 'option',
-          props: { value: i, selected: i === s.activeRecipeIndex },
+          attr: { value: String(i) },
           text: r.title
         })),
-        on: {
-          input: (e, el, s) => {
-            const newIndex = parseInt(el.node.value)
-            s.update({ 
-              activeRecipeIndex: newIndex,
-              targetYield: s.recipes[newIndex].baseYield || 4,
-              activeStepIndex: 0
-            })
-            el.getRoot().update()
-          }
+        onRender: (el, s) => {
+          el.node.value = String(s.root.activeRecipeIndex)
+        },
+        onInput: (e, el, s) => {
+          const idx = parseInt(el.node.value)
+          if (isNaN(idx)) return
+          const recipe = s.root.recipes[idx]
+          s.root.update({ 
+            activeRecipeIndex: idx,
+            targetYield: recipe.baseYield || 4,
+            activeStepIndex: 0,
+            ingredients: recipe.ingredients,
+            instructions: recipe.instructions
+          })
         }
       },
       H3: { tag: 'h3', text: 'Instructions', fontSize: 'C', borderBottom: '2px solid', borderBottomColor: 'primary', paddingBottom: 'Z' },
-      InstructionStepper: {
-        children: (el, s) => s.recipes[s.activeRecipeIndex]?.instructions || [],
+      StepperContainer: {
+        flow: 'y', gap: 'B',
+        children: (el, s) => (s.root.instructions || []).map(text => ({ text })),
+        childExtends: 'InstructionStep',
+        childrenAs: 'state'
       }
     }
   }

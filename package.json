@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@symbo.ls/starter-kit",
-  "version": "3.8.9",
+  "version": "3.14.1",
   "description": "Example dev setup to use Symbols",
   "author": "symbo.ls",
   "repository": "https://github.com/symbo-ls/starter-kit",
@@ -15,7 +15,7 @@
     "jsdom": "^29.0.1",
     "node-fetch": "^3.3.2",
     "puppeteer": "^24.40.0",
-    "smbls": "^3.8.9"
+    "smbls": "^3.14.1"
   },
   "publishConfig": {
     "access": "restricted"

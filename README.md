@@ -14,12 +14,14 @@ Built on the **Symbols/DOMQL v3** framework, the application utilizes:
 
 ## ✨ Features & Use Cases
 
-- **Dynamic Ingredient Scaling**: Adjust the target yield (portions) using simple controls. All ingredient quantities update instantly based on the recipe's base yield.
-- **Unit System Toggle**: Seamlessly switch between **US (Imperial)** and **Metric** units. The application handles conversions for common units like cups to ml and oz to g.
-- **Interactive Step-by-Step Instructions**: A "Instruction Stepper" that highlights the current step and allows users to navigate through the cooking process.
+- **Dynamic Multi-Recipe Support**: Instantly switch between multiple recipes via a centralized dropdown. The entire UI—including titles, scaling logic, ingredients, and instructions—synchronizes instantly using optimized DOMQL reactivity.
+- **Unit System Toggle**: Seamlessly switch between **US (Imperial)** and **Metric** units. The application supports a wide range of units including cups, ounces, tablespoons, teaspoons, fluid ounces, quarts, and pounds.
+- **Smart Metric Scaling**: Automatic scaling between Metric units (e.g., grams to kilograms, milliliters to liters) based on quantity to ensure maximum readability.
+- **Interactive Step-by-Step Instructions**: A "Instruction Stepper" that highlights the current step and allows users to navigate through the cooking process with smooth auto-scroll.
+- **Optimized Visual Experience**: High-contrast **forced light mode** globally implemented to ensure optimal visibility in kitchen environments and prevent OS-level rendering inconsistencies.
 - **Smart Ingredient Checklist**: Ingredients can be marked as "checked" or "complete" as they are prepared, with visual feedback (opacity and strike-through).
 - **Responsive "Two-Pane" Layout**: A layout optimized for both large kitchen displays and mobile devices, ensuring recipes are easy to read anywhere.
-- **Auto-Formatting**: Quantities are automatically formatted into human-readable fractions (e.g., 1/2, 3/4) for better usability.
+- **Auto-Formatting**: US quantities are automatically formatted into human-readable fractions (e.g., 1/2, 3/4) while Metric values use precise decimals.
 
 ## 📋 Prerequisites
 
